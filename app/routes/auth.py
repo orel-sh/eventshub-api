@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from app.models.models import UserRegister, UserLogin
 from app.config.database import users_collection
-from app.auth.jwt import hash_password, verify_password, create_access_token, get_current_user
+from app.auth.jwt import hash_password, verify_password, create_access_token, get_current_user, require_admin
 from app.schemas.schemas import user_serial
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
@@ -33,3 +33,9 @@ async def login(credentials: UserLogin):
 @router.get("/me")
 async def get_me(current_user: dict = Depends(get_current_user)):
     return user_serial(current_user)
+
+
+@router.get("/users")
+async def get_all_users(_: dict = Depends(require_admin)):
+    users = [user_serial(u) for u in users_collection.find()]
+    return {"total": len(users), "users": users}
