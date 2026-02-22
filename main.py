@@ -5,7 +5,7 @@ from app.routes.registrations import router as registrations_router
 from app.config.elasticsearch import init_es_index
 
 app = FastAPI(
-    title="GeoEvents Platform",
+    title="EventsHub",
     description=(
         "API for managing location-based events. "
         "Features: JWT auth, Elasticsearch search, Redis caching, "
